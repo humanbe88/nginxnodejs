@@ -42,6 +42,7 @@ jobs:
         echo ${{ secrets.AWS_SECRET_ACCESS_KEY }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCESS_KEY_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
         docker-compose push
       if: success()
+      
     - name: Create ECS Task Definition for Node.js App
       run: |
         task_definition=$(aws ecs register-task-definition --family my-app-nodejs --container-definitions '[{"name":"my-app-nodejs","image":"'"${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-app-nodejs:latest"'","cpu":256,"memoryReservation":512}]' --requires-compatibilities EC2 FARGATE --network-mode bridge --execution-role-arn arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/ecsTaskExecutionRole --region ${{ secrets.AWS_REGION }} --query 'taskDefinition.taskDefinitionArn' --output text)
@@ -57,8 +58,5 @@ jobs:
       id: create-service
       if: success()
 
-    - name: Output ECS Service ARN
-      run: echo "ECS Service ARN: ${{ steps.create-service.outputs.service }}"
-      if: success()
 
 
