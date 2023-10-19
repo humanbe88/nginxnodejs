@@ -52,7 +52,7 @@ jobs:
     - name: Create ECS Service
       run: |
         task_definition_arn=$(echo ${{ steps.create-task-definition.outputs.task_definition }})
-        service=$(aws ecs create-service --cluster my-cluster --service-name my-app-service --launch-type FARGATE --task-definition $task_definition_arn --desired-count 2 --region ${{ secrets.AWS_REGION }} --query 'service.serviceArn' --output text)
+        service=$(aws ecs create-service --cluster Dev-Cluster --service-name my-app-service --launch-type FARGATE --task-definition $task_definition_arn --desired-count 2 --region ${{ secrets.AWS_REGION }} --query 'service.serviceArn' --output text)
         echo "::set-output name=service::$service"
       id: create-service
       if: success()
