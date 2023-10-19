@@ -44,7 +44,7 @@ jobs:
       
     - name: Create ECS Task Definition for Node.js App
       run: |
-        task_definition=$(aws ecs register-task-definition --family my-app-nodejs --container-definitions '[{"name":"my-app-nodejs","image":"'"${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-app-nodejs:latest"'","cpu":256,"memoryReservation":512}]' --requires-compatibilities EC2 FARGATE --network-mode bridge --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole --region ${{ secrets.AWS_REGION }} --query 'taskDefinition.taskDefinitionArn' --output text)
+        task_definition=$(aws ecs register-task-definition --family my-app-nodejs --container-definitions '[{"name":"my-app-nodejs","image":"'"${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-app-nodejs:latest"'","cpu":256,"memoryReservation":512}]' --requires-compatibilities EC2 FARGATE --network-mode awsvpc --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole --region ${{ secrets.AWS_REGION }} --query 'taskDefinition.taskDefinitionArn' --output text)
         echo "::set-output name=task_definition::$task_definition"
       id: create-task-definition
       if: success()
