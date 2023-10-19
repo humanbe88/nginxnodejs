@@ -11,7 +11,7 @@ COPY app.js .
 RUN npm init -y && npm install http
 
 # Expose the port on which the application will listen
-EXPOSE 3000
+EXPOSE 80
 
 # Command to run the Node.js application
 CMD ["node", "app.js"]
