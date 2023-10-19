@@ -32,8 +32,8 @@ on:
 
 env:
   AWS_REGION: 'ap-southeast-1'                   # set this to your preferred AWS region, e.g. us-west-1
-  ECR_REPOSITORY: 158543191340.dkr.ecr.ap-southeast-1.amazonaws.com/cyberuse           # set this to your Amazon ECR repository name
-  ECS_SERVICE: service01                 # set this to your Amazon ECS service name
+  ECR_REPOSITORY: cyberuse           # set this to your Amazon ECR repository name
+  ECS_SERVICE: service02                 # set this to your Amazon ECS service name
   ECS_CLUSTER: Dev-Cluster                 # set this to your Amazon ECS cluster name
   ECS_TASK_DEFINITION: task-definition.json # set this to the path to your Amazon ECS task definition
                                                # file, e.g. .aws/task-definition.json
@@ -68,7 +68,7 @@ jobs:
       id: build-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        IMAGE_TAG: ${{ github.sha }}
+        IMAGE_TAG: latest
       run: |
         # Build a docker container and
         # push it to ECR so that it can
