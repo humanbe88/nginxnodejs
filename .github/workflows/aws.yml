@@ -23,7 +23,7 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_REGION }}
+        aws-region: ${{ secrets.AWS_REGION }}
     - name: Login to Amazon ECR
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v2
@@ -52,7 +52,7 @@ jobs:
            --memory '512' \
            --network-mode awsvpc \
            --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole \
-           --region ${{ env.AWS_REGION }} \
+           --region ${{ secrets.AWS_REGION }} \
            --query 'taskDefinition.taskDefinitionArn' \
            --output text)
          echo "::set-output name=task_definition::$task_definition"
@@ -65,7 +65,7 @@ jobs:
           aws ecs describe-services \
             --cluster Dev-Cluster \
             --services nginx03 \
-            --region ${{ env.AWS_REGION }} \
+            --region ${{ secrets.AWS_REGION }} \
             --query 'services'
       continue-on-error: true
 
@@ -76,7 +76,7 @@ jobs:
             --cluster Dev-Cluster \
             --service nginx03 \
             --task-definition ${{ steps.create-task-definition.outputs.task_definition }} \
-            --region ${{ env.AWS_REGION }} \
+            --region ${{ secrets.AWS_REGION }} \
             --network-configuration 'awsvpcConfiguration={subnets=[subnet-08f54a661372b61ec,subnet-0089e4e0b482b5e74,subnet-03f2328b03251e024],securityGroups=[sg-0a8dce2295c378772],assignPublicIp=ENABLED}' \
             --enable-ecs-managed-tags \
             --desired-count 1
@@ -90,7 +90,7 @@ jobs:
             --service-name nginx03 \
             --task-definition ${{ steps.create-task-definition.outputs.task_definition }} \
             --launch-type FARGATE \
-            --region ${{ env.AWS_REGION }} \
+            --region ${{ secrets.AWS_REGION }} \
             --network-configuration 'awsvpcConfiguration={subnets=[subnet-08f54a661372b61ec,subnet-0089e4e0b482b5e74,subnet-03f2328b03251e024],securityGroups=[sg-0a8dce2295c378772],assignPublicIp=ENABLED}' \
             --enable-ecs-managed-tags \
             --desired-count 1
