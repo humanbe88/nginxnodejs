@@ -97,7 +97,7 @@ jobs:
            --query 'taskDefinition.taskDefinitionArn' \
            --output text)
          #echo "::set-output name=task_definition::$task_definition"
-         run: echo "task_definition=$task_definition" >> $GITHUB_OUTPUT
+         echo "task_definition=$task_definition" >> $GITHUB_OUTPUT
       id: create-task-definition
       if: success()
 
