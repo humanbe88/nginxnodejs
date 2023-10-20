@@ -56,7 +56,7 @@ jobs:
            --query 'taskDefinition.taskDefinitionArn' \
            --output text)
          echo "::set-output name=task_definition::$task_definition"
-      id: create-task
+      id: create-task-definition
       if: success()
 
     - name: Create ECS Service
@@ -64,13 +64,13 @@ jobs:
           service=$(aws ecs create-service \
             --cluster Dev-Cluster \
             --service-name nginx03 \
-            --task-definition docker-task \
-            --desired-count 1
+            --task-definition ${{ steps.create-task-definition.outputs.task_definition }} \
             --launch-type FARGATE \
             --region ${{ secrets.AWS_REGION }} \
-            --query 'service.serviceArn' \
-            --output text)
-          echo "::set-output name=service_arn::$service"
+            --network-configuration 'awsvpcConfiguration={subnets=[subnet-08f54a661372b61ec,subnet-0089e4e0b482b5e74,subnet-03f2328b03251e024],securityGroups=[sg-0a8dce2295c378772]}' \
+            --assign-public-ip ENABLED \
+            --desired-count 1
+          echo "Service created successfully"
       id: create-service
       if: success()
 
