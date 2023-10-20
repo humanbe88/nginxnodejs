@@ -51,6 +51,15 @@ jobs:
               "name": "hello-world-app",
               "image": "158543191340.dkr.ecr.ap-southeast-1.amazonaws.com/node:latest",
               "essential": true,
+              "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "awslogs-nginx",
+                    "awslogs-region": "${{ secrets.AWS_REGION }}",
+                    "awslogs-stream-prefix": "awslogs-hello-world-app"
+                }
+              },
               "cpu": 256,
               "memory": 512,   
               "memoryReservation": 256
@@ -65,6 +74,15 @@ jobs:
                   "hostPort": 80
                 }
               ],
+              "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-create-group": "true",
+                    "awslogs-group": "awslogs-nginx",
+                    "awslogs-region": "${{ secrets.AWS_REGION }}",
+                    "awslogs-stream-prefix": "awslogs-hello-world-nginx"
+                }
+              },
               "cpu": 256,
               "memory": 512,  
               "memoryReservation": 256  
@@ -93,7 +111,7 @@ jobs:
       continue-on-error: true
 
     - name: Update ECS Service
-      if: steps.check-service.outputs.services != ''
+      #if: steps.check-service.outputs.services != ''
       run: |
           aws ecs update-service \
             --cluster Dev-Cluster \
@@ -105,9 +123,10 @@ jobs:
             --desired-count 1 \
             --force-new-deployment
           echo "Service updated successfully"
+      continue-on-error: true
 
     - name: Create ECS Service
-      if: steps.check-service.outputs.services == ''
+      #if: steps.check-service.outputs.services == ''
       run: |
           aws ecs create-service \
             --cluster Dev-Cluster \
@@ -120,5 +139,6 @@ jobs:
             --desired-count 1
           echo "Service created successfully"
       id: create-service
+      continue-on-error: true
 
 
