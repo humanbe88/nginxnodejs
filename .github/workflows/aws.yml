@@ -42,18 +42,32 @@ jobs:
         docker-compose push
       if: success()
       
-    - name: Create ECS Task Definition for Node.js App
+    - name: Create ECS Task Definition
       run: |
-        task_definition=$(aws ecs register-task-definition --family my-app-nodejs --container-definitions '[{"name":"my-app-nodejs","image":"'"${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/my-app-nodejs:latest"'","cpu":256,"memoryReservation":512}]' --requires-compatibilities EC2 FARGATE --network-mode awsvpc --cpu 256 --memory 512 --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole --region ${{ secrets.AWS_REGION }} --query 'taskDefinition.taskDefinitionArn' --output text)
-        echo "::set-output name=task_definition::$task_definition"
-      id: create-task-definition
+         task_definition=$(aws ecs register-task-definition \
+           --family docker-task \
+           --container-definitions '[{"name":"docker-container","image":"158543191340.dkr.ecr.ap-southeast-1.amazonaws.com/nodenginx:latest","cpu":256,"memory":512,"portMappings":[{"containerPort":80,"hostPort":80}]}]' \
+           --requires-compatibilities FARGATE \
+           --network-mode awsvpc \
+           --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole \
+           --region ${{ secrets.AWS_REGION }} \
+           --query 'taskDefinition.taskDefinitionArn' \
+           --output text)
+         echo "::set-output name=task_definition::$task_definition"
+      id: create-task
       if: success()
 
     - name: Create ECS Service
       run: |
-        task_definition_arn=$(echo ${{ steps.create-task-definition.outputs.task_definition }})
-        service=$(aws ecs create-service --cluster Dev-Cluster --service-name my-app-service --launch-type FARGATE --task-definition $task_definition_arn --desired-count 2 --region ${{ secrets.AWS_REGION }} --query 'service.serviceArn' --output text)
-        echo "::set-output name=service::$service"
+          service=$(aws ecs create-service \
+            --cluster Dev-Cluster \
+            --service-name nginx03 \
+            --task-definition docker-task \
+            --launch-type FARGATE \
+            --region ${{ secrets.AWS_REGION }} \
+            --query 'service.serviceArn' \
+            --output text)
+          echo "::set-output name=service_arn::$service"
       id: create-service
       if: success()
 
