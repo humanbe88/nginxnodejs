@@ -67,7 +67,7 @@ jobs:
               "memory": 512,   // Specify the memory for the container in megabytes
               "memoryReservation": 256   // Specify the memory reservation for the container in megabytes
             }
-           ]'
+           ]' \
            --requires-compatibilities FARGATE \
            --cpu '256' \
            --memory '512' \
