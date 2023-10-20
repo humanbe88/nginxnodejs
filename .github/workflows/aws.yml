@@ -74,7 +74,7 @@ jobs:
       run: |
           aws ecs update-service \
             --cluster Dev-Cluster \
-            --service-name nginx03 \
+            --service nginx03 \
             --task-definition ${{ steps.create-task-definition.outputs.task_definition }} \
             --region ${{ secrets.AWS_REGION }} \
             --network-configuration 'awsvpcConfiguration={subnets=[subnet-08f54a661372b61ec,subnet-0089e4e0b482b5e74,subnet-03f2328b03251e024],securityGroups=[sg-0a8dce2295c378772],assignPublicIp=ENABLED}' \
