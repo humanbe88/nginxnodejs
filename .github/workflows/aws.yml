@@ -100,7 +100,8 @@ jobs:
             --region ${{ secrets.AWS_REGION }} \
             --network-configuration 'awsvpcConfiguration={subnets=[subnet-08f54a661372b61ec,subnet-0089e4e0b482b5e74,subnet-03f2328b03251e024],securityGroups=[sg-0a8dce2295c378772],assignPublicIp=ENABLED}' \
             --enable-ecs-managed-tags \
-            --desired-count 1
+            --desired-count 1 \
+            --force-new-deployment
           echo "Service updated successfully"
 
     - name: Create ECS Service
