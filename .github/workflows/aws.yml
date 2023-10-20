@@ -93,7 +93,7 @@ jobs:
       continue-on-error: true
 
     - name: Update ECS Service
-      if: steps.check-service.outputs.services != 'null'
+      if: steps.check-service.outputs.services != ''
       run: |
           aws ecs update-service \
             --cluster Dev-Cluster \
@@ -107,7 +107,7 @@ jobs:
           echo "Service updated successfully"
 
     - name: Create ECS Service
-      if: steps.check-service.outputs.services == 'null'
+      if: steps.check-service.outputs.services == ''
       run: |
           aws ecs create-service \
             --cluster Dev-Cluster \
