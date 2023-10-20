@@ -51,8 +51,8 @@ jobs:
               "name": "hello-world-app",
               "image": "158543191340.dkr.ecr.ap-southeast-1.amazonaws.com/node:latest",
               "essential": true
-              "memory": 512,   // Specify the memory for the container in megabytes
-              "memoryReservation": 256   // Specify the memory reservation for the container in megabytes
+              "memory": 512,   
+              "memoryReservation": 256
             },
             {
               "name": "hello-world-nginx",
@@ -64,8 +64,8 @@ jobs:
                   "hostPort": 80
                 }
               ]
-              "memory": 512,   // Specify the memory for the container in megabytes
-              "memoryReservation": 256   // Specify the memory reservation for the container in megabytes
+              "memory": 512,  
+              "memoryReservation": 256  
             }
            ]' \
            --requires-compatibilities FARGATE \
