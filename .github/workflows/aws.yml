@@ -48,6 +48,8 @@ jobs:
            --family docker-task \
            --container-definitions '[{"name":"docker-container","image":"158543191340.dkr.ecr.ap-southeast-1.amazonaws.com/nodenginx:latest","cpu":256,"memory":512,"portMappings":[{"containerPort":80,"hostPort":80}]}]' \
            --requires-compatibilities FARGATE \
+           --cpu '256' \
+           --memory '512' \
            --network-mode awsvpc \
            --execution-role-arn arn:aws:iam::158543191340:role/ecsTaskExecutionRole \
            --region ${{ secrets.AWS_REGION }} \
