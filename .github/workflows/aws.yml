@@ -65,6 +65,7 @@ jobs:
             --cluster Dev-Cluster \
             --service-name nginx03 \
             --task-definition docker-task \
+            --desired-count 1
             --launch-type FARGATE \
             --region ${{ secrets.AWS_REGION }} \
             --query 'service.serviceArn' \
